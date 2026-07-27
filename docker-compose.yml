@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: cflow-postgres
+    environment:
+      POSTGRES_USER: cflow
+      POSTGRES_PASSWORD: cflow
+      POSTGRES_DB: cflow_monitor
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cflow"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: cflow-backend
+    environment:
+      DATABASE_URL: postgresql://cflow:cflow@postgres:5432/cflow_monitor
+      CHECK_INTERVAL_SECONDS: 60
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cflow-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
