@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { AuthService } from './core/services/auth.service';
 
@@ -86,6 +86,8 @@ import { AuthService } from './core/services/auth.service';
   `]
 })
 export class AppComponent {
+  @ViewChild('sidenav') sidenav!: MatSidenav;
+
   constructor(public authService: AuthService) {}
 
   logout() {

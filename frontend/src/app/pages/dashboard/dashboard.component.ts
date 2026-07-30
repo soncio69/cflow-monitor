@@ -302,9 +302,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.dataSource.data = data;
         this.updateCounts();
 
-        if (this.dataSource.paginator) {
-          this.dataSource.paginator.paginator = this.paginator;
-        }
+        this.dataSource.paginator = this.paginator;
         if (this.dataSource.sort) {
           this.dataSource.sort = this.sort;
         }
